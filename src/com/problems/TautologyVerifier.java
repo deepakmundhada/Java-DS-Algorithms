@@ -1,3 +1,9 @@
+/* Problem Statement: Create Tautology Verifier which can have maximum 26 variables and operation
+&, |, ! only.
+
+Input -
+*/
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,7 +15,7 @@ class Node {
 	Node right, left;
 }
 
-public class CheckTautology {
+public class TautologyVerifier {
 	static List<Boolean> isval = new ArrayList<Boolean>();
 	static List<Character> value = new ArrayList<Character>();
 	static boolean isInsert = false;
@@ -27,13 +33,18 @@ public class CheckTautology {
 			head.left = null;
 
 			isInsert = true;
+
 			if(root == null) root = head;
 
 			return head;
-		}		
+		}
 
-		if(Character.isLowerCase(head.val)) return head;
-		else if( head.val == '!') head.left = insertNode(head.left, c);
+		if(Character.isLowerCase(head.val)) {
+			return head;
+		}
+		else if(head.val == '!') {
+			head.left = insertNode(head.left, c);
+		}
 		else {
 			head.left = insertNode(head.left, c);
 			head.right = insertNode(head.right, c);
@@ -44,15 +55,19 @@ public class CheckTautology {
 
 	//Check if expression is tautology or not
 	static boolean eval(Node head) {
-		if(head != null && Character.isLowerCase(head.val)) return isval.get(head.val - 'a');
-	
+		if(head != null && Character.isLowerCase(head.val)) {
+			return isval.get(head.val - 'a');
+		}
+
 		char op = head.val;
 		boolean tr1, tr2 = false;
-		
+
 		tr1 = eval(head.left) ;
-	
-		if(op != '!') tr2 = eval(head.right);
-	
+
+		if(op != '!') {
+			tr2 = eval(head.right);
+		}
+
 		switch (op) {
 			case '&': return tr1 && tr2;
 			case '|': return tr1 || tr2;
@@ -60,9 +75,11 @@ public class CheckTautology {
 			default : return false;
 		}
 	}
-	
+
 	static void search(int pos, int len) {
-		if(!isTautology) return;		
+		if(!isTautology) {
+			return;
+		}
 		else if(pos == len) {
 			Node head = root;
 			if(!eval(head)) isTautology = false;
@@ -75,34 +92,59 @@ public class CheckTautology {
 		isval.add(value.get(pos) -'a', true);
 	}
 
+	static boolean isOperator(char element) {
+	    if(element == '&' || element == '|' || element == '!') {
+	        return true;
+	    }
+        return false;
+	}
+
 	//Convert expression from Infix to prefix
 	static String convertInfixToPrefix(String str) {
 		Stack<Character> stack = new Stack<Character>();
         String prefix = "";
         str = str.replaceAll("\\s+","");
 
-        for(int i = str.length()-1; i >= 0; i--) {
-            char c = str.charAt(i);
-            
-            if(Character.isLetter(c) || c == "!".charAt(0))
-                prefix = ((Character)c).toString() + prefix;
-            else if(c == '(') {
-            	while(!stack.isEmpty())
-            		prefix = ((Character)stack.pop()).toString() + prefix;
-            }
-            else if(c == ')') continue;
-            else stack.push(c);
-        }
+        try {
+	        for(int i = str.length()-1; i >= 0; i--) {
+	            char c = str.charAt(i);
 
+	            if(Character.isLetter(c) || c == '!') {
+	                prefix = ((Character)c).toString() + prefix;
+	            }
+	            else if(c == '(') {
+	            	while(!stack.isEmpty()) {
+	            		prefix = ((Character)stack.pop()).toString() + prefix;
+	            	}
+	            }
+	            else if(c == ')') {
+	            	continue;
+	            }
+	            else if(isOperator(c)) {
+	            	stack.push(c);
+	            }
+	            else {
+	            	throw new Exception();
+	            }
+	        }
+
+	        while(!stack.isEmpty()) {
+	            prefix = ((Character)stack.pop()).toString() + prefix;
+	        }
+	    } catch(Exception e) {
+	    	System.out.println("expression is not valid");
+	    }
+
+	    System.out.println("prefix " + prefix);
         return prefix;
     }
 
-	static void IsExpressionTautology(String expression) {
+	static void IsExpressionTautology(String expression) throws Exception {
 		root = null;
 		isTautology = true;
 
 		char[] exprInPrefix = convertInfixToPrefix(expression).toCharArray();
-		
+
 		Node head = null;
 		int tempLen = exprInPrefix.length;
 
@@ -118,17 +160,19 @@ public class CheckTautology {
 
 		search(0, value.size());
 
-		if(isTautology)
+		if(isTautology) {
 			System.out.println("True");
-		else
+		}
+		else {
 			System.out.println("False");
+		}
 
 		value.clear();
 	}
 
-	public static void main(String args []) {
+	public static void main(String args []) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		
+
 		for(int i = 0; i < 26; i++) {
 			isval.add(false);
 		}
