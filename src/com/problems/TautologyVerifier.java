@@ -1,7 +1,10 @@
 /* Problem Statement: Create Tautology Verifier which can have maximum 26 variables and operation
 &, |, ! only.
 
-Input -
+Input - (!a & !b & (c & d))
+Output - False
+Input - ((a & (!b | b)) | (!a & (!b | b)))
+Output - True
 */
 
 import java.util.ArrayList;
@@ -135,7 +138,6 @@ public class TautologyVerifier {
 	    	System.out.println("expression is not valid");
 	    }
 
-	    System.out.println("prefix " + prefix);
         return prefix;
     }
 
@@ -182,12 +184,3 @@ public class TautologyVerifier {
 		}
 	}
 }
-
-
-/*6
-(!a | a)
-(!a | (a & a))
-(!a | (b & !a))
-(!a & !b & (c & d))
-(a & (b | c))
-((a & (!b | b)) | (!a & (!b | b)))*/
