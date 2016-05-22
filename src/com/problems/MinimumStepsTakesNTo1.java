@@ -11,7 +11,7 @@ Output - Minimum number of steps are 9
 import java.util.Scanner;
 import java.util.Arrays;
 
-public class MinimumStepsNTo1 {
+public class MinimumStepsTakesNTo1 {
 	static int[] memo;
 
 	static void initialize(int n) {
@@ -19,10 +19,10 @@ public class MinimumStepsNTo1 {
 		Arrays.fill(memo, -1);
 	}
 
+	//Using Dynamic programming Bottom-up approach
 	static int compute_steps(int n) {
 		if(n == 1) return 0;
 
-		//Using Dynamic programming Bottom-up approach
 		memo[1] = 0;
 
 		for(int i = 2; i <= n; i++) {
@@ -33,8 +33,16 @@ public class MinimumStepsNTo1 {
             if(i % 3 == 0) memo[i] = Math.min(memo[i], 1 + memo[i/3]);
 		}
 
-		//Alternate way of doing same using top-down [gives stack overflow problem]
-		/*if(memo[n] != -1) return memo[n];
+		return memo[n];
+	}
+
+	//Alternate way of doing same using top-down [gives stack overflow problem]
+	/*static int compute_steps(int n) {
+		if(n == 1) return 0;
+
+		memo[1] = 0;
+
+		if(memo[n] != -1) return memo[n];
 
 		int r = 1 + compute_steps(n - 1);
 
@@ -42,10 +50,10 @@ public class MinimumStepsNTo1 {
 
 		if(n % 3 == 0) r = Math.min(r, 1 + compute_steps(n/3));
 
-		memo[n] = r;*/
+		memo[n] = r;
 
 		return memo[n];
-	}
+	}*/
 
 	public static void main (String[] args) throws Exception {
 		Scanner sc = new Scanner(System.in);
