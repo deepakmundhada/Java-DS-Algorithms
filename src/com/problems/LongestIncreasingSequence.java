@@ -100,6 +100,8 @@ public class LongestIncreasingSequence {
 	//From Wiki with complexity O(n log n)
 	static int[] computeLIS(int[] X, int N) {
 		int[] P = new int[N];
+
+		//M[j] — stores the index k where j represents the length of the increasing subsequence and k represents the index of its termination
 		int[] M = new int[N + 1];
 
 		int L = 0, low, high, newLow, mid;
